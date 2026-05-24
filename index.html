@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UNDIP Maps — Peta Fasilitas Kampus</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Leaflet Routing Machine -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <div class="logo-icon"><i class="fas fa-map-location-dot"></i></div>
+        <div>
+          <span class="logo-title">UNDIP Maps</span>
+          <span class="logo-sub">Kampus Tembalang</span>
+        </div>
+      </div>
+      <button class="sidebar-toggle" id="sidebarToggle" title="Tutup panel">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-wrap">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" id="searchInput" placeholder="Cari fasilitas..." autocomplete="off" />
+      <button id="clearSearch" class="clear-btn" style="display:none"><i class="fas fa-times"></i></button>
+    </div>
+
+    <!-- FILTER KATEGORI -->
+    <div class="filter-section">
+      <p class="section-label">Kategori</p>
+      <div class="filter-chips" id="filterChips">
+        <button class="chip active" data-cat="all"><i class="fas fa-border-all"></i> Semua</button>
+        <button class="chip" data-cat="akademik"><i class="fas fa-building-columns"></i> Akademik</button>
+        <button class="chip" data-cat="kesehatan"><i class="fas fa-hospital"></i> Kesehatan</button>
+        <button class="chip" data-cat="ibadah"><i class="fas fa-mosque"></i> Ibadah</button>
+        <button class="chip" data-cat="olahraga"><i class="fas fa-dumbbell"></i> Olahraga</button>
+        <button class="chip" data-cat="kantin"><i class="fas fa-utensils"></i> Kantin</button>
+        <button class="chip" data-cat="atm"><i class="fas fa-credit-card"></i> ATM / Bank</button>
+        <button class="chip" data-cat="parkir"><i class="fas fa-square-parking"></i> Parkir</button>
+        <button class="chip" data-cat="lainnya"><i class="fas fa-star"></i> Lainnya</button>
+      </div>
+    </div>
+
+    <!-- DAFTAR TEMPAT -->
+    <div class="places-section">
+      <p class="section-label">Daftar Lokasi <span id="placeCount" class="count-badge">0</span></p>
+      <div class="places-list" id="placesList"></div>
+    </div>
+
+    <!-- RUTE PANEL -->
+    <div class="route-panel" id="routePanel" style="display:none">
+      <div class="route-header">
+        <i class="fas fa-route"></i>
+        <span>Petunjuk Arah</span>
+        <button id="closeRoute" class="close-route"><i class="fas fa-times"></i></button>
+      </div>
+      <div id="routeInfo" class="route-info"></div>
+    </div>
+  </aside>
+
+  <!-- SIDEBAR COLLAPSED TOGGLE -->
+  <button class="sidebar-open-btn" id="sidebarOpenBtn" style="display:none" title="Buka panel">
+    <i class="fas fa-map-location-dot"></i>
+  </button>
+
+  <!-- MAP -->
+  <div id="map"></div>
+
+  <!-- FLOATING MY LOCATION -->
+  <button class="fab" id="locateBtn" title="Lokasi Saya">
+    <i class="fas fa-crosshairs"></i>
+  </button>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Leaflet Routing Machine -->
+  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
