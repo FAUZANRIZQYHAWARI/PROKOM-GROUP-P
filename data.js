@@ -397,13 +397,13 @@ const places = [
 
 // Kategori metadata
 const categories = {
-  all:       { label: "Semua",      icon: "border-all",              color: "#1e293b" },
-  akademik:  { label: "Akademik",   icon: "building-columns",        color: "#3b82f6" },
+  all:       { label: "Semua",      icon: "border-all",              color: "#1e3a8a" },
+  akademik:  { label: "Akademik",   icon: "building-columns",        color: "#1e40af" },
   kesehatan: { label: "Kesehatan",  icon: "hospital",                color: "#ef4444" },
   ibadah:    { label: "Ibadah",     icon: "mosque",                  color: "#10b981" },
   olahraga:  { label: "Olahraga",   icon: "dumbbell",                color: "#f59e0b" },
   kantin:    { label: "Kantin",     icon: "utensils",                color: "#f97316" },
   atm:       { label: "ATM / Bank", icon: "credit-card",             color: "#8b5cf6" },
   parkir:    { label: "Parkir",     icon: "square-parking",          color: "#6b7280" },
-  lainnya:   { label: "Lainnya",    icon: "star",                    color: "#0ea5e9" }
+  lainnya:   { label: "Lainnya",    icon: "star",                    color: "#1e40af" }
 };

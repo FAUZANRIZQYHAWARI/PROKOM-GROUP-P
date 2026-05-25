@@ -1,0 +1,83 @@
+<!-- ============================================================
+     CONTOH INTEGRASI FIREBASE REALTIME DATABASE
+     Tambahkan script ini ke index.html untuk mengaktifkan data real-time
+     ============================================================ -->
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebaseapp/10.0.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebaseapp/10.0.0/firebase-database.js"></script>
+
+<script>
+  // 1. Setup Firebase Configuration
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY_HERE",
+    authDomain: "your-project.firebaseapp.com",
+    databaseURL: "https://your-project-default-rtdb.firebaseio.com",
+    projectId: "your-project",
+    storageBucket: "your-project.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:abcdef123456"
+  };
+
+  // 2. Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+
+  // 3. Override loadPlacesDataRealTime() di app.js
+  // Gunakan Firebase untuk fetch data
+  
+  // Contoh: Fetch data dari Firebase
+  database.ref('places').on('value', (snapshot) => {
+    const firebaseData = snapshot.val();
+    if (firebaseData) {
+      // Convert Firebase object ke array
+      places = Object.values(firebaseData);
+      renderMarkers();
+      updateSyncStatus(true);
+      lastDataSync = new Date();
+    }
+  }, (error) => {
+    console.error('Firebase error:', error);
+    updateSyncStatus(false);
+  });
+
+  // Contoh: Listen to realtime updates
+  database.ref('places').on('child_changed', (snapshot) => {
+    const updatedPlace = snapshot.val();
+    const index = places.findIndex(p => p.id === updatedPlace.id);
+    if (index !== -1) {
+      places[index] = updatedPlace;
+      // Update marker di map
+      updateMarker(updatedPlace.id);
+    }
+  });
+
+  // Listen untuk penambahan fasilitas baru
+  database.ref('places').on('child_added', (snapshot) => {
+    const newPlace = snapshot.val();
+    places.push(newPlace);
+    renderMarkers();
+  });
+
+  // SETUP FIREBASE DATABASE RULES (firestore.json)
+  // {
+  //   "rules": {
+  //     "places": {
+  //       ".read": true,
+  //       ".write": "auth.uid != null"
+  //     }
+  //   }
+  // }
+
+  // STRUKTUR DATA DI FIREBASE:
+  // places/
+  //   ├── 1
+  //   │   ├── id: 1
+  //   │   ├── name: "Rektorat UNDIP"
+  //   │   ├── category: "akademik"
+  //   │   ├── lat: -7.0497
+  //   │   ├── lng: 110.4376
+  //   │   └── ...
+  //   ├── 2
+  //   │   └── ...
+</script>

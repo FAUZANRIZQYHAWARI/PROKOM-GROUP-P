@@ -8,6 +8,8 @@
   // ── CONFIG ────────────────────────────────────────────────
   const UNDIP_CENTER = [-7.0505, 110.4375];
   const DEFAULT_ZOOM = 16;
+  const DATA_REFRESH_INTERVAL = 30000; // 30 detik
+  const API_ENDPOINT = "/api/places"; // Ubah ke endpoint API Anda (Firebase, Node.js, dll)
 
   // ── STATE ─────────────────────────────────────────────────
   let map, routingControl, userMarker;
@@ -16,6 +18,64 @@
   let allMarkers = {};      // id → L.marker
   let userLocation = null;
   let selectedPlace = null;
+  let lastDataSync = new Date();
+  let isLoadingData = false;
+
+  // ── REAL-TIME DATA LOADING ────────────────────────────────
+  async function loadPlacesDataRealTime() {
+    if (isLoadingData) return;
+    isLoadingData = true;
+
+    try {
+      // Pilihan 1: Load dari API
+      // Uncomment untuk menggunakan API real-time (Firebase, Node.js, etc)
+      // const response = await fetch(API_ENDPOINT);
+      // if (response.ok) {
+      //   const data = await response.json();
+      //   places.splice(0, places.length, ...data);
+      //   lastDataSync = new Date();
+      //   updateSyncStatus(true);
+      //   renderMarkers();
+      // }
+
+      // Untuk sekarang menggunakan data lokal (uncomment bagian API di atas untuk real-time)
+      lastDataSync = new Date();
+      updateSyncStatus(true);
+    } catch (error) {
+      console.error("Error loading real-time data:", error);
+      updateSyncStatus(false);
+    } finally {
+      isLoadingData = false;
+    }
+  }
+
+  function updateSyncStatus(isConnected) {
+    const syncEl = document.getElementById("syncStatus");
+    if (syncEl) {
+      syncEl.className = isConnected ? "data-sync-status connected" : "data-sync-status disconnected";
+      syncEl.innerHTML = isConnected 
+        ? `<span class="sync-dot"></span> Data Terbaru: <span id="lastUpdate">${lastDataSync.toLocaleTimeString()}</span>`
+        : `<span class="sync-dot error"></span> Offline Mode`;
+    }
+  }
+
+  // Setup auto-refresh real-time data
+  function setupAutoRefresh() {
+    loadPlacesDataRealTime(); // Load initial
+    setInterval(loadPlacesDataRealTime, DATA_REFRESH_INTERVAL);
+  }
+
+  // ── SPLASH SCREEN ────────────────────────────────────────
+  function hideSplashScreen() {
+    const splash = document.getElementById("splashScreen");
+    if (splash) {
+      // Splash screen sudah otomatis hilang dengan CSS animation
+      // Hapus dari DOM setelah animasi selesai
+      setTimeout(() => {
+        splash.remove();
+      }, 3300);
+    }
+  }
 
   // ── INIT MAP ──────────────────────────────────────────────
   function initMap() {
@@ -397,8 +457,21 @@
     });
   }
 
+  // ── SPLASH SCREEN ────────────────────────────────────────
+  function hideSplashScreen() {
+    const splash = document.getElementById("splashScreen");
+    if (splash) {
+      // Splash screen sudah otomatis hilang dengan CSS animation
+      // Hapus dari DOM setelah animasi selesai
+      setTimeout(() => {
+        splash.remove();
+      }, 3300);
+    }
+  }
+
   // ── BOOT ──────────────────────────────────────────────────
   function boot() {
+    hideSplashScreen();
     initMap();
     initSidebar();
     initFilters();
@@ -406,6 +479,7 @@
     initRouteClose();
     initLocateBtn();
     renderMarkers();
+    setupAutoRefresh(); // Aktifkan real-time data sync
 
     // Auto-request GPS on page load
     startWatching();
